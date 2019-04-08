@@ -41,7 +41,6 @@ CREATE TABLE dev.POSTS(
 );""".strip()
         self.assertEqual(statement, expected_statement)
 
-
     def test_overwrite_column(self):
         table = Table()
         table.with_name("POSTS")
@@ -152,3 +151,18 @@ CREATE TABLE POSTS(
         with open(file.name, 'r') as the_file:
             content = the_file.read()
             self.assertEqual(expected_statement, content)
+
+    def test_with_header(self):
+        statement = Table() \
+            .with_name("POSTS") \
+            .with_column("id", "INTEGER", "not null") \
+            .with_header("""/* This is comments */""")\
+            .build()
+
+        expected_statement = """
+/* This is comments */
+CREATE TABLE POSTS(
+  id INTEGER not null
+);""".strip()
+        self.assertEqual(statement, expected_statement)
+

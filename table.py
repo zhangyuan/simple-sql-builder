@@ -28,6 +28,7 @@ class Table(object):
         self.name = None
         self.columns = []
         self.primary_key = None
+        self.header = None
 
     def extend(self):
         table = Table()
@@ -65,6 +66,10 @@ class Table(object):
         self.primary_key = PrimaryKey(key)
         return self
 
+    def with_header(self, text):
+        self.header = text
+        return self
+
     def full_name(self):
         if self.database_name:
             name = "{0}.{1}".format(self.database_name, self.name)
@@ -72,6 +77,9 @@ class Table(object):
             name = self.name
 
         return name
+
+    def header_text(self):
+        return self.header + "\n" if self.header else ""
 
     def build(self):
         statements = []
@@ -87,8 +95,8 @@ class Table(object):
         else:
             statements_text = "\n"
 
-        statement = """CREATE TABLE {0}({1});""".format(
-            self.full_name(), statements_text
+        statement = """{0}CREATE TABLE {1}({2});""".format(
+            self.header_text(), self.full_name(), statements_text
         )
         return statement
 

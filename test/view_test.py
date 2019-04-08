@@ -128,3 +128,25 @@ FROM POSTS;""".strip()
         with open(file.name, 'r') as the_file:
             content = the_file.read()
             self.assertEqual(expected_statement, content)
+
+
+    def test_with_header(self):
+        statement = Table() \
+            .with_name("POSTS") \
+            .with_column("id", "INTEGER", "not null") \
+            .with_column("title", "varchar(10)", "not null") \
+            .build_view() \
+            .with_name("POSTS_VIEW") \
+            .select_column("title") \
+            .with_action("CREATE") \
+            .with_header("/* This is comments */")\
+            .build()
+
+        expected_statement = """
+/* This is comments */
+CREATE VIEW POSTS_VIEW
+AS
+SELECT
+title
+FROM POSTS;""".strip()
+        self.assertEqual(expected_statement, statement)

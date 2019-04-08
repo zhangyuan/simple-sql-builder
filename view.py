@@ -17,6 +17,7 @@ class View(object):
         self.name = None
         self.columns = []
         self.database_name = None
+        self.header = None
 
     def full_name(self):
         if self.database_name:
@@ -36,6 +37,13 @@ class View(object):
         self.action = action
         return self
 
+    def with_header(self, text):
+        self.header = text
+        return self
+
+    def header_text(self):
+        return self.header + "\n" if self.header else ""
+
     def select_column(self, name):
         available_columns = (column.name for column in self.table.columns)
         if name not in available_columns:
@@ -53,17 +61,19 @@ class View(object):
         else:
             statements_text = "\n"
 
-        statement = """{0} VIEW {1}
+        statement = """{0}{1} VIEW {2}
 AS
 SELECT
-{2}
-FROM {3};""".format(
+{3}
+FROM {4};""".format(
+            self.header_text(),
             self.action,
             self.full_name(),
             statements_text,
             self.table.full_name()
         )
         return statement
+
 
     def to_path(self, path):
         with open(path, 'w') as the_file:
