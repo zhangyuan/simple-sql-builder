@@ -47,7 +47,7 @@ class View(object):
     def select_column(self, name):
         available_columns = (column.name for column in self.table.columns)
         if name not in available_columns:
-            raise ColumnNotExits("""Column 'title' does not exist""")
+            raise ColumnNotExits("""Column '{0}' does not exist""".format(name))
         self.columns.append(ViewColumn(name))
         return self
 
