@@ -49,6 +49,28 @@ author
 FROM POSTS;""".strip()
         self.assertEqual(statement, expected_statement)
 
+    def test_chain_calls(self):
+        statement = Table()\
+            .with_name("POSTS")\
+            .with_column("id", "INTEGER", "not null")\
+            .with_column("title", "varchar(10)", "not null")\
+            .with_column("author", "varchar(20)")\
+            .build_view()\
+            .with_name("POSTS_VIEW")\
+            .select_column("title")\
+            .select_column("author")\
+            .with_action("CREATE")\
+            .build()
+
+        expected_statement = """
+CREATE VIEW POSTS_VIEW
+AS
+SELECT
+title,
+author
+FROM POSTS;""".strip()
+        self.assertEqual(statement, expected_statement)
+
     def test_raise_error_when_column_does_not_exist_on_table(self):
         table = Table()
         table.with_name("POSTS")

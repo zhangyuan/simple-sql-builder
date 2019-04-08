@@ -42,6 +42,20 @@ CREATE TABLE POSTS(
 );""".strip()
         self.assertEqual(statement, expected_statement)
 
+    def test_chain_calls(self):
+        statement = Table()\
+            .with_name("POSTS")\
+            .with_column("id", "INTEGER", "not null")\
+            .with_column("title", "varchar(10)", "not null")\
+            .build()
+
+        expected_statement = """
+CREATE TABLE POSTS(
+  id INTEGER not null,
+  title varchar(10) not null
+);""".strip()
+        self.assertEqual(statement, expected_statement)
+
     def test_build_table_with_primary_key(self):
         table = Table()
         table.with_name("POSTS")
