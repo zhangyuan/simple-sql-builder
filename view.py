@@ -16,10 +16,21 @@ class View(object):
         self.action = None
         self.name = None
         self.columns = []
+        self.database_name = None
+
+    def full_name(self):
+        if self.database_name:
+            name = "{0}.{1}".format(self.database_name, self.name)
+        else:
+            name = self.name
+        return name
 
     def with_name(self, name):
         self.name = name
         return self
+
+    def with_database_name(self, name):
+        self.database_name = name
 
     def with_action(self, action):
         self.action = action
@@ -41,14 +52,15 @@ class View(object):
             statements_text = ",\n".join(statements)
         else:
             statements_text = "\n"
+
         statement = """{0} VIEW {1}
 AS
 SELECT
 {2}
 FROM {3};""".format(
             self.action,
-            self.name,
+            self.full_name(),
             statements_text,
-            self.table.name
+            self.table.full_name()
         )
         return statement

@@ -25,6 +25,29 @@ title
 FROM POSTS;""".strip()
         self.assertEqual(statement, expected_statement)
 
+    def test_build_view_from_table_with_database_name(self):
+        table = Table()\
+            .with_database_name("dev")\
+            .with_name("POSTS")\
+            .with_column("id", "INTEGER", "not null")\
+            .with_column("title", "varchar(10)", "not null")
+
+        view = table.build_view()
+        view.with_database_name("dev_views")
+        view.with_name("POSTS_VIEW")
+        view.select_column("title")
+        view.with_action("CREATE")
+
+        statement = view.build()
+
+        expected_statement = """
+CREATE VIEW dev_views.POSTS_VIEW
+AS
+SELECT
+title
+FROM dev.POSTS;""".strip()
+        self.assertEqual(statement, expected_statement)
+
     def test_build_view_with_multiple_columns_from_table(self):
         table = Table()
         table.with_name("POSTS")

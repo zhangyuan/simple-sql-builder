@@ -65,6 +65,14 @@ class Table(object):
         self.primary_key = PrimaryKey(key)
         return self
 
+    def full_name(self):
+        if self.database_name:
+            name = "{0}.{1}".format(self.database_name, self.name)
+        else:
+            name = self.name
+
+        return name
+
     def build(self):
         statements = []
 
@@ -79,12 +87,8 @@ class Table(object):
         else:
             statements_text = "\n"
 
-        if self.database_name:
-            table_name = "{0}.{1}".format(self.database_name, self.name)
-        else:
-            table_name = self.name
         statement = """CREATE TABLE {0}({1});""".format(
-            table_name, statements_text
+            self.full_name(), statements_text
         )
         return statement
 
