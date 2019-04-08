@@ -4,12 +4,6 @@ Library to help build SQL with Python script.
 
 ## Usage
 
-# simple-sql-builder
-
-Library to help build SQL with Python script.
-
-## Usage
-
 ### Generate SQL to create table
 
 ```
