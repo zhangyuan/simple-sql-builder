@@ -36,8 +36,16 @@ class Table(object):
         return table
 
     def with_column(self, name, datatype, desc=""):
-        column = TableColumn(name, datatype, desc)
-        self.columns.append(column)
+        existing_column = False
+        for column in self.columns:
+            if column.name == name:
+                existing_column = True
+                column.datatype = datatype
+                column.desc = desc
+        if not existing_column:
+            column = TableColumn(name, datatype, desc)
+            self.columns.append(column)
+
         return self
 
     def with_name(self, name):
