@@ -48,6 +48,10 @@ class Table(object):
 
         return self
 
+    def drop_column(self, name):
+        self.columns = list(column for column in self.columns if column.name != name)
+        return self
+
     def with_name(self, name):
         self.name = name
         return self
