@@ -92,5 +92,9 @@ class Table(object):
         )
         return statement
 
+    def to_path(self, path):
+        with open(path, 'w') as the_file:
+            the_file.write(self.build())
+
     def build_view(self):
         return View(self)

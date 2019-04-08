@@ -1,4 +1,5 @@
 import unittest
+import tempfile
 
 from table import Table
 
@@ -135,3 +136,20 @@ CREATE TABLE POSTS(
   start_date DATE not null,
   PRIMARY KEY (id)
 );""".strip())
+
+    def test_to_path_from_table(self):
+        file = tempfile.NamedTemporaryFile()
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("title", "varchar(10)", "not null")
+
+        table.to_path(file.name)
+
+        expected_statement = """
+CREATE TABLE POSTS(
+  title varchar(10) not null
+);""".strip()
+        with open(file.name, 'r') as the_file:
+            content = the_file.read()
+            print(content)
+            self.assertEqual(expected_statement, content)
