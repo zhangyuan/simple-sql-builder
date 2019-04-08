@@ -64,3 +64,8 @@ FROM {3};""".format(
             self.table.full_name()
         )
         return statement
+
+    def to_path(self, path):
+        with open(path, 'w') as the_file:
+            the_file.write(self.build())
+

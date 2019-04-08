@@ -151,5 +151,4 @@ CREATE TABLE POSTS(
 );""".strip()
         with open(file.name, 'r') as the_file:
             content = the_file.read()
-            print(content)
             self.assertEqual(expected_statement, content)

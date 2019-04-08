@@ -1,3 +1,4 @@
+import tempfile
 import unittest
 from table import Table
 from view import ColumnNotExits
@@ -105,3 +106,25 @@ FROM POSTS;""".strip()
             view.select_column("title")
         self.assertEqual('Column \'title\' does not exist', str(context.exception))
 
+    def test_to_file_from_view(self):
+        file = tempfile.NamedTemporaryFile()
+
+        Table()\
+            .with_name("POSTS")\
+            .with_column("id", "INTEGER", "not null")\
+            .with_column("title", "varchar(10)", "not null")\
+            .build_view()\
+            .with_name("POSTS_VIEW")\
+            .select_column("title")\
+            .with_action("CREATE")\
+            .to_path(file.name)
+
+        expected_statement = """
+CREATE VIEW POSTS_VIEW
+AS
+SELECT
+title
+FROM POSTS;""".strip()
+        with open(file.name, 'r') as the_file:
+            content = the_file.read()
+            self.assertEqual(expected_statement, content)
