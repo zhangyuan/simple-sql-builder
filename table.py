@@ -19,8 +19,9 @@ class PrimaryKey(object):
         return "PRIMARY KEY ({0})".format(self.key)
 
 
-class TableBuilder(object):
+class Table(object):
     def __init__(self):
+        self.name = None
         self.columns = []
         self.primary_key = None
 

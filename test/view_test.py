@@ -1,21 +1,21 @@
 import unittest
-from table import TableBuilder
+from table import Table
 from view import ColumnNotExits
 
 
-class TableBuilderTest(unittest.TestCase):
+class ViewTest(unittest.TestCase):
     def test_build_view_from_table(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        builder.with_column("id", "INTEGER", "not null")
-        builder.with_column("title", "varchar(10)", "not null")
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("id", "INTEGER", "not null")
+        table.with_column("title", "varchar(10)", "not null")
 
-        view_builder = builder.build_view()
-        view_builder.with_name("POSTS_VIEW")
-        view_builder.select_column("title")
-        view_builder.with_action("CREATE")
+        view = table.build_view()
+        view.with_name("POSTS_VIEW")
+        view.select_column("title")
+        view.with_action("CREATE")
 
-        statement = view_builder.build()
+        statement = view.build()
 
         expected_statement = """
 CREATE VIEW POSTS_VIEW
@@ -26,19 +26,19 @@ FROM POSTS;""".strip()
         self.assertEqual(statement, expected_statement)
 
     def test_build_view_with_multiple_columns_from_table(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        builder.with_column("id", "INTEGER", "not null")
-        builder.with_column("title", "varchar(10)", "not null")
-        builder.with_column("author", "varchar(20)")
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("id", "INTEGER", "not null")
+        table.with_column("title", "varchar(10)", "not null")
+        table.with_column("author", "varchar(20)")
 
-        view_builder = builder.build_view()
-        view_builder.with_name("POSTS_VIEW")
-        view_builder.select_column("title")
-        view_builder.select_column("author")
-        view_builder.with_action("CREATE")
+        view = table.build_view()
+        view.with_name("POSTS_VIEW")
+        view.select_column("title")
+        view.select_column("author")
+        view.with_action("CREATE")
 
-        statement = view_builder.build()
+        statement = view.build()
 
         expected_statement = """
 CREATE VIEW POSTS_VIEW
@@ -50,13 +50,13 @@ FROM POSTS;""".strip()
         self.assertEqual(statement, expected_statement)
 
     def test_raise_error_when_column_does_not_exist_on_table(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        builder.with_column("id", "INTEGER", "not null")
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("id", "INTEGER", "not null")
 
-        view_builder = builder.build_view()
-        view_builder.with_name("POSTS_VIEW")
+        view = table.build_view()
+        view.with_name("POSTS_VIEW")
         with self.assertRaises(ColumnNotExits) as context:
-            view_builder.select_column("title")
+            view.select_column("title")
         self.assertEqual('Column \'title\' does not exist', str(context.exception))
 

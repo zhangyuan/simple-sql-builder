@@ -1,13 +1,13 @@
 import unittest
 
-from table import TableBuilder
+from table import Table
 
 
-class ViewBuilderTest(unittest.TestCase):
+class TableTest(unittest.TestCase):
     def test_build_empty_table(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        statement = builder.build()
+        table = Table()
+        table.with_name("POSTS")
+        statement = table.build()
 
         expected_statement = """
 CREATE TABLE POSTS(
@@ -15,11 +15,11 @@ CREATE TABLE POSTS(
         self.assertEqual(statement, expected_statement)
 
     def test_build_table_with_one_column(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        builder.with_column("title", "varchar(10)", "not null")
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("title", "varchar(10)", "not null")
 
-        statement = builder.build()
+        statement = table.build()
 
         expected_statement = """
 CREATE TABLE POSTS(
@@ -28,12 +28,12 @@ CREATE TABLE POSTS(
         self.assertEqual(statement, expected_statement)
 
     def test_build_table_with_multiple_columns(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        builder.with_column("id", "INTEGER", "not null")
-        builder.with_column("title", "varchar(10)", "not null")
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("id", "INTEGER", "not null")
+        table.with_column("title", "varchar(10)", "not null")
 
-        statement = builder.build()
+        statement = table.build()
 
         expected_statement = """
 CREATE TABLE POSTS(
@@ -43,11 +43,11 @@ CREATE TABLE POSTS(
         self.assertEqual(statement, expected_statement)
 
     def test_build_table_with_primary_key(self):
-        builder = TableBuilder()
-        builder.with_name("POSTS")
-        builder.with_column("id", "INTEGER", "not null")
-        builder.with_primary_key("id")
-        statement = builder.build()
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("id", "INTEGER", "not null")
+        table.with_primary_key("id")
+        statement = table.build()
 
         expected_statement = """
 CREATE TABLE POSTS(
