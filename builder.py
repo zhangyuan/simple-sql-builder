@@ -29,6 +29,48 @@ class Builder(object):
     def build(self):
         pass
 
+class ViewColumn(object):
+    def __init__(self, name):
+        self.name = name
+    def build(self):
+        return "{0}".format(self.name)
+
+class ViewBuilder(object):
+    def __init__(self, table_builder):
+        self.table_builder = table_builder
+        self.columns = []
+
+    def with_name(self, name):
+        self.name = name
+        return self
+
+    def with_action(self, action):
+        self.action = action
+        return self
+
+    def select_column(self, name):
+        self.columns.append(ViewColumn(name))
+        return self
+
+    def build(self):
+        statements = []
+        for column in self.columns:
+            statements.append(column.build())
+        if(len(statements) > 0):
+            statements_text = ",\n".join(statements)
+        else:
+            statements_text = "\n"
+        statement = """{0} VIEW {1}
+AS
+SELECT
+{2}
+FROM {3};""".format(
+            self.action,
+            self.name,
+            statements_text,
+            self.table_builder.name
+        )
+        return statement
 class TableBuilder(Builder):
     def build(self):
         statements = []
@@ -48,3 +90,5 @@ class TableBuilder(Builder):
             self.name,statements_text
         )
         return statement
+    def to_view(self):
+        return ViewBuilder(self)

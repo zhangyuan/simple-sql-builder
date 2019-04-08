@@ -1,7 +1,7 @@
 import unittest
-from builder import TableBuilder
+from builder import TableBuilder, ViewBuilder
 
-class TableBuilderTest(unittest.TestCase):
+class ViewBuilderTest(unittest.TestCase):
     def test_build_empty_table(self):
         builder = TableBuilder()
         builder.with_name("POSTS")
