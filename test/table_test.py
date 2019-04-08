@@ -55,3 +55,26 @@ CREATE TABLE POSTS(
   PRIMARY KEY (id)
 );""".strip()
         self.assertEqual(statement, expected_statement)
+
+    def test_extend_from_existing_table(self):
+        table = Table()
+        table.with_name("POSTS")
+        table.with_column("id", "INTEGER", "not null")
+        table.with_primary_key("id")
+
+        extended_table = table.extend()
+
+        extended_table.with_column("start_date", "DATE", "not null")
+
+        self.assertEqual(table.build(), """
+CREATE TABLE POSTS(
+  id INTEGER not null,
+  PRIMARY KEY (id)
+);""".strip())
+
+        self.assertEqual(extended_table.build(), """
+CREATE TABLE POSTS(
+  id INTEGER not null,
+  start_date DATE not null,
+  PRIMARY KEY (id)
+);""".strip())

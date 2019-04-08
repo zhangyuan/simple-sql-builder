@@ -7,6 +7,9 @@ class TableColumn(object):
         self.datatype = datatype
         self.desc = desc
 
+    def duplicate(self):
+        return TableColumn(self.name, self.datatype, self.desc)
+
     def build(self):
         return "{0} {1} {2}".format(self.name, self.datatype, self.desc)
 
@@ -24,6 +27,13 @@ class Table(object):
         self.name = None
         self.columns = []
         self.primary_key = None
+
+    def extend(self):
+        table = Table()
+        table.name = self.name
+        table.columns = list(column.duplicate() for column in self.columns)
+        table.primary_key = self.primary_key
+        return table
 
     def with_column(self, name, datatype, desc=""):
         column = TableColumn(name, datatype, desc)
