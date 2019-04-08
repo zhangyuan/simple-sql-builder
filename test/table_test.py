@@ -27,6 +27,20 @@ CREATE TABLE POSTS(
 );""".strip()
         self.assertEqual(statement, expected_statement)
 
+    def test_build_table_with_database_name(self):
+        statement = Table()\
+        .with_database_name("dev")\
+        .with_name("POSTS")\
+        .with_column("title", "varchar(10)", "not null")\
+        .build()
+
+        expected_statement = """
+CREATE TABLE dev.POSTS(
+  title varchar(10) not null
+);""".strip()
+        self.assertEqual(statement, expected_statement)
+
+
     def test_overwrite_column(self):
         table = Table()
         table.with_name("POSTS")

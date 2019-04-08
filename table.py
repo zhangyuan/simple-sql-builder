@@ -24,6 +24,7 @@ class PrimaryKey(object):
 
 class Table(object):
     def __init__(self):
+        self.database_name = None
         self.name = None
         self.columns = []
         self.primary_key = None
@@ -34,6 +35,10 @@ class Table(object):
         table.columns = list(column.duplicate() for column in self.columns)
         table.primary_key = self.primary_key
         return table
+
+    def with_database_name(self, name):
+        self.database_name = name
+        return self
 
     def with_column(self, name, datatype, desc=""):
         existing_column = False
@@ -74,8 +79,12 @@ class Table(object):
         else:
             statements_text = "\n"
 
+        if self.database_name:
+            table_name = "{0}.{1}".format(self.database_name, self.name)
+        else:
+            table_name = self.name
         statement = """CREATE TABLE {0}({1});""".format(
-            self.name,statements_text
+            table_name, statements_text
         )
         return statement
 
