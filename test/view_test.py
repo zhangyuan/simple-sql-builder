@@ -1,5 +1,6 @@
 import unittest
 from table import TableBuilder
+from view import ColumnNotExits
 
 
 class TableBuilderTest(unittest.TestCase):
@@ -46,4 +47,16 @@ SELECT
 title,
 author
 FROM POSTS;""".strip()
-        self.assertEqual(statement, expected_statement)        
+        self.assertEqual(statement, expected_statement)
+
+    def test_raise_error_when_column_does_not_exist_on_table(self):
+        builder = TableBuilder()
+        builder.with_name("POSTS")
+        builder.with_column("id", "INTEGER", "not null")
+
+        view_builder = builder.build_view()
+        view_builder.with_name("POSTS_VIEW")
+        with self.assertRaises(ColumnNotExits) as context:
+            view_builder.select_column("title")
+        self.assertEqual('Column \'title\' does not exist', str(context.exception))
+

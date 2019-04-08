@@ -1,3 +1,7 @@
+class ColumnNotExits(Exception):
+    pass
+
+
 class ViewColumn(object):
     def __init__(self, name):
         self.name = name
@@ -22,6 +26,9 @@ class View(object):
         return self
 
     def select_column(self, name):
+        available_columns = (column.name for column in self.table_builder.columns)
+        if name not in available_columns:
+            raise ColumnNotExits("""Column 'title' does not exist""")
         self.columns.append(ViewColumn(name))
         return self
 
