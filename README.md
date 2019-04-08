@@ -6,7 +6,7 @@ Library to help build SQL with Python script.
 
 ### Generate SQL to create table
 
-```
+```python
 Table() \
     .with_database_name("dev") \
     .with_name("POSTS") \
@@ -17,7 +17,8 @@ Table() \
 ```
 
 The content of `/tmp/POSTS.sql` is below:
-```
+
+```sql
 /* This is comment for table */
 CREATE TABLE dev.POSTS(
   id INTEGER not null,
@@ -26,7 +27,8 @@ CREATE TABLE dev.POSTS(
 ```
 
 ### Generate SQL to create view from table
-```
+
+```python
 Table() \
     .with_database_name("dev")\
     .with_name("POSTS") \
@@ -39,8 +41,10 @@ Table() \
     .with_header("This is comment for view")\
     .to_path("/tmp/POSTS_VIEW.sql")
 ```
+
 The content of `/tmp/POSTS_VIEW.sql` is below:
-```
+
+```sql
 /* This is comment for view */
 CREATE VIEW dev_view.POSTS_VIEW
 AS
