@@ -139,11 +139,11 @@ FROM POSTS;""".strip()
             .with_name("POSTS_VIEW") \
             .select_column("title") \
             .with_action("CREATE") \
-            .with_header("/* This is comments */")\
+            .with_header("/* This is comment */")\
             .build()
 
         expected_statement = """
-/* This is comments */
+/* This is comment */
 CREATE VIEW POSTS_VIEW
 AS
 SELECT

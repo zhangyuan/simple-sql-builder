@@ -156,11 +156,11 @@ CREATE TABLE POSTS(
         statement = Table() \
             .with_name("POSTS") \
             .with_column("id", "INTEGER", "not null") \
-            .with_header("""/* This is comments */""")\
+            .with_header("""/* This is comment */""")\
             .build()
 
         expected_statement = """
-/* This is comments */
+/* This is comment */
 CREATE TABLE POSTS(
   id INTEGER not null
 );""".strip()
