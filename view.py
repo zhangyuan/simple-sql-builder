@@ -13,7 +13,7 @@ class ViewColumn(object):
 class View(object):
     def __init__(self, table):
         self.table = table
-        self.action = None
+        self.action = "CREATE"
         self.name = None
         self.columns = []
         self.database_name = None
@@ -32,6 +32,7 @@ class View(object):
 
     def with_database_name(self, name):
         self.database_name = name
+        return self
 
     def with_action(self, action):
         self.action = action
@@ -74,8 +75,21 @@ FROM {4};""".format(
         )
         return statement
 
-
     def to_path(self, path):
         with open(path, 'w') as the_file:
             the_file.write(self.build())
 
+
+if __name__ == '__main__':
+    from table import Table
+    Table() \
+        .with_database_name("dev")\
+        .with_name("POSTS") \
+        .with_column("id", "INTEGER", "not null") \
+        .with_column("title", "varchar(10)", "not null") \
+        .build_view()\
+        .with_database_name("dev_view")\
+        .with_name("POSTS_VIEW")\
+        .select_column("title")\
+        .with_header("/* This is comment for view */")\
+        .to_path("/tmp/POSTS_VIEW.sql")

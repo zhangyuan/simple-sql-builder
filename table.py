@@ -106,3 +106,12 @@ class Table(object):
 
     def build_view(self):
         return View(self)
+
+if __name__ == '__main__':
+    Table() \
+        .with_database_name("dev") \
+        .with_name("POSTS") \
+        .with_column("id", "INTEGER", "not null") \
+        .with_column("title", "varchar(10)", "not null") \
+        .with_header("""/* This is comment for table */""") \
+        .to_path("/tmp/POSTS.sql")

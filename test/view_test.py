@@ -23,6 +23,24 @@ title
 FROM POSTS;""".strip()
         self.assertEqual(statement, expected_statement)
 
+    def test_build_view_with_default_action_from_table(self):
+        table = self.create_table()
+
+        view = table.build_view()
+        view.with_name("POSTS_VIEW")
+        view.select_column("title")
+
+        statement = view.build()
+
+        expected_statement = """
+CREATE VIEW POSTS_VIEW
+AS
+SELECT
+title
+FROM POSTS;""".strip()
+        self.assertEqual(statement, expected_statement)
+
+
     def test_build_view_from_table_with_database_name(self):
         table = self.create_table().with_database_name("dev")
 
