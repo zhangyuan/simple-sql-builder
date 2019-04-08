@@ -11,8 +11,8 @@ class ViewColumn(object):
 
 
 class View(object):
-    def __init__(self, table_builder):
-        self.table_builder = table_builder
+    def __init__(self, table):
+        self.table = table
         self.action = None
         self.name = None
         self.columns = []
@@ -26,7 +26,7 @@ class View(object):
         return self
 
     def select_column(self, name):
-        available_columns = (column.name for column in self.table_builder.columns)
+        available_columns = (column.name for column in self.table.columns)
         if name not in available_columns:
             raise ColumnNotExits("""Column 'title' does not exist""")
         self.columns.append(ViewColumn(name))
@@ -49,6 +49,6 @@ FROM {3};""".format(
             self.action,
             self.name,
             statements_text,
-            self.table_builder.name
+            self.table.name
         )
         return statement
