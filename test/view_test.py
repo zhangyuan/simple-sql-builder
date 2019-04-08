@@ -1,15 +1,15 @@
 import unittest
-from builder import TableBuilder
+from table import TableBuilder
+
 
 class TableBuilderTest(unittest.TestCase):
-
     def test_build_view_from_table(self):
         builder = TableBuilder()
         builder.with_name("POSTS")
         builder.with_column("id", "INTEGER", "not null")
         builder.with_column("title", "varchar(10)", "not null")
 
-        view_builder = builder.to_view()
+        view_builder = builder.build_view()
         view_builder.with_name("POSTS_VIEW")
         view_builder.select_column("title")
         view_builder.with_action("CREATE")
@@ -31,7 +31,7 @@ FROM POSTS;""".strip()
         builder.with_column("title", "varchar(10)", "not null")
         builder.with_column("author", "varchar(20)")
 
-        view_builder = builder.to_view()
+        view_builder = builder.build_view()
         view_builder.with_name("POSTS_VIEW")
         view_builder.select_column("title")
         view_builder.select_column("author")

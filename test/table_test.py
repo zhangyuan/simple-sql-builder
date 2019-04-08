@@ -1,5 +1,7 @@
 import unittest
-from builder import TableBuilder, ViewBuilder
+
+from table import TableBuilder
+
 
 class ViewBuilderTest(unittest.TestCase):
     def test_build_empty_table(self):
